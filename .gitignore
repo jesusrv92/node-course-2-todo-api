@@ -1,0 +1,4 @@
+node_modules/
+mongo-data/
+mongo.exe
+mongod.exe
