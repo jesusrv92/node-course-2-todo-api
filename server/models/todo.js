@@ -1,5 +1,4 @@
 const { mongoose } = require('../db/mongoose');
-
 const Todo = mongoose.model('Todo', {
     text: {
         type: String,
@@ -16,5 +15,4 @@ const Todo = mongoose.model('Todo', {
         default: null
     }
 });
-
 module.exports = { Todo };

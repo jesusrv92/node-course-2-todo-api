@@ -1,5 +1,4 @@
 const { mongoose } = require('../db/mongoose');
-
 const User = mongoose.model('User', {
     email: {
         type: String,
@@ -8,5 +7,4 @@ const User = mongoose.model('User', {
         trim: true
     }
 });
-
 module.exports = { User };
