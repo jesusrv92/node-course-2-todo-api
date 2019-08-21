@@ -1,21 +1,23 @@
-const expect = require('expect');
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const expect = require("expect");
 const request = require('supertest');
-const { app } = require('./../server');
-const { Todo } = require('./../models/todo');
+const server_1 = require("./../server");
+const todo_1 = require("./../models/todo");
 const todos = [{
         text: 'First test todo'
     }, {
         text: 'Second test todo'
     }];
 beforeEach((done) => {
-    Todo.deleteMany({}).then(() => {
-        return Todo.insertMany(todos);
+    todo_1.default.deleteMany({}).then(() => {
+        return todo_1.default.insertMany(todos);
     }).then(() => done());
 });
 describe('POST /todos', () => {
     it('should create a new todo', (done) => {
         var text = 'Test todo text';
-        request(app)
+        request(server_1.default)
             .post('/todos')
             .send({ text })
             .expect(200)
@@ -26,7 +28,7 @@ describe('POST /todos', () => {
             if (err) {
                 return done(err);
             }
-            Todo.find({ text }).then((todos) => {
+            todo_1.default.find({ text }).then((todos) => {
                 expect(todos.length).toBe(1);
                 expect(todos[0].text).toBe(text);
                 done();
@@ -35,7 +37,7 @@ describe('POST /todos', () => {
         });
     });
     it('should not create todo with invalid body data', (done) => {
-        request(app)
+        request(server_1.default)
             .post('/todos')
             .send({})
             .expect(400)
@@ -43,7 +45,7 @@ describe('POST /todos', () => {
             if (err) {
                 return done(err);
             }
-            Todo.find().then((todos) => {
+            todo_1.default.find().then((todos) => {
                 expect(todos.length).toBe(2);
                 done();
             }).catch((e) => done(e));
@@ -52,7 +54,7 @@ describe('POST /todos', () => {
 });
 describe('GET /todos', () => {
     it('should get all todos', (done) => {
-        request(app)
+        request(server_1.default)
             .get('/todos')
             .expect(200)
             .expect((res) => {

@@ -1,5 +1,7 @@
-const { mongoose } = require('../db/mongoose');
-const User = mongoose.model('User', {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const mongoose_1 = require("../db/mongoose");
+const User = mongoose_1.default.model('User', {
     email: {
         type: String,
         required: true,
@@ -7,4 +9,4 @@ const User = mongoose.model('User', {
         trim: true
     }
 });
-module.exports = { User };
+exports.default = User;
