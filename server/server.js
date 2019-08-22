@@ -41,4 +41,18 @@ app.get('/todos/:id', (req, res) => {
         res.status(400).send();
     });
 });
+app.delete('/todos/:id', (req, res) => {
+    let id = req.params.id;
+    if (!mongodb_1.ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+    todo_1.default.findByIdAndDelete(id).then((todo) => {
+        if (!todo) {
+            return res.status(404).send();
+        }
+        res.send({ todo });
+    }).catch((e) => {
+        res.status(400).send();
+    });
+});
 exports.default = app;
