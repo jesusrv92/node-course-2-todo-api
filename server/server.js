@@ -2,12 +2,12 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongodb = require("mongodb");
-const { ObjectID } = mongodb;
+const mongodb_1 = require("mongodb");
 const todo_1 = require("./models/todo");
 const app = express();
-app.listen(3000, () => {
-    console.log('Started on port 3000');
+const port = process.env.PORT || 3000;
+app.listen(port, () => {
+    console.log(`Started on port ${port}`);
 });
 app.use(bodyParser.json());
 app.post('/todos', (req, res) => {
@@ -29,7 +29,7 @@ app.get('/todos', (req, res) => {
 });
 app.get('/todos/:id', (req, res) => {
     let id = req.params.id;
-    if (!ObjectID.isValid(id)) {
+    if (!mongodb_1.ObjectID.isValid(id)) {
         return res.status(404).send();
     }
     todo_1.default.findById(id).then((todo) => {
