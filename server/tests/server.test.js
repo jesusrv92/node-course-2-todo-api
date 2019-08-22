@@ -4,6 +4,9 @@ const expect = require("expect");
 const mongodb = require("mongodb");
 const request = require('supertest');
 const { ObjectID } = mongodb;
+// declare function beforeEach(fn: Function): Promise<{}>;
+// declare function describe(str: string, fn: Function): void;
+// declare function it(str: string, fn: Function): void;
 const server_1 = require("./../server");
 const todo_1 = require("./../models/todo");
 const todos = [{
@@ -85,6 +88,38 @@ describe('GET /todos/:id', () => {
     it('should return 404 for non-object ids', (done) => {
         request(server_1.default)
             .get(`/todos/[hello]`)
+            .expect(404)
+            .end(done);
+    });
+});
+describe('DELETE /todos/:id', () => {
+    it('should remove a todo', (done) => {
+        const hexId = todos[1]._id.toHexString();
+        request(server_1.default)
+            .delete(`/todos/${hexId}`)
+            .expect(200)
+            .expect((res) => {
+            expect(res.body.todo._id).toBe(hexId);
+        })
+            .end((err, res) => {
+            if (err) {
+                return done(err);
+            }
+            todo_1.default.findById(hexId).then((todo) => {
+                expect(todo).toBeFalsy();
+                done();
+            }).catch((e) => done(e));
+        });
+    });
+    it('should return 404 if todo not found', (done) => {
+        request(server_1.default)
+            .delete(`/todos/${(new ObjectID()).toHexString()}`)
+            .expect(404)
+            .end(done);
+    });
+    it('should return 404 for non-object ids', (done) => {
+        request(server_1.default)
+            .delete(`/todos/[hello]`)
             .expect(404)
             .end(done);
     });
