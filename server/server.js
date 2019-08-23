@@ -1,12 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+require("./config/config");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongodb_1 = require("mongodb");
 const _ = require("lodash");
 const todo_1 = require("./models/todo");
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Started on port ${port}`);
 });
