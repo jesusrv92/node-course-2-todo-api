@@ -1,19 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const expect = require("expect");
-const mongodb = require("mongodb");
+const mongodb_1 = require("mongodb");
 const request = require('supertest');
-const { ObjectID } = mongodb;
-// declare function beforeEach(fn: Function): Promise<{}>;
-// declare function describe(str: string, fn: Function): void;
-// declare function it(str: string, fn: Function): void;
 const server_1 = require("./../server");
 const todo_1 = require("./../models/todo");
 const todos = [{
-        _id: new ObjectID(),
+        _id: new mongodb_1.ObjectID(),
         text: 'First test todo'
     }, {
-        _id: new ObjectID(),
+        _id: new mongodb_1.ObjectID(),
         text: 'Second test todo'
     }];
 beforeEach((done) => {
@@ -23,7 +19,7 @@ beforeEach((done) => {
 });
 describe('POST /todos', () => {
     it('should create a new todo', (done) => {
-        var text = 'Test todo text';
+        const text = 'Test todo text';
         request(server_1.default)
             .post('/todos')
             .send({ text })
@@ -81,7 +77,7 @@ describe('GET /todos/:id', () => {
     });
     it('should return 404 if todo not found', (done) => {
         request(server_1.default)
-            .get(`/todos/${(new ObjectID()).toHexString()}`)
+            .get(`/todos/${(new mongodb_1.ObjectID()).toHexString()}`)
             .expect(404)
             .end(done);
     });
@@ -113,7 +109,7 @@ describe('DELETE /todos/:id', () => {
     });
     it('should return 404 if todo not found', (done) => {
         request(server_1.default)
-            .delete(`/todos/${(new ObjectID()).toHexString()}`)
+            .delete(`/todos/${(new mongodb_1.ObjectID()).toHexString()}`)
             .expect(404)
             .end(done);
     });

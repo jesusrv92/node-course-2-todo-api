@@ -3,8 +3,8 @@ const { mongoose } = require('./../server/db/mongoose');
 const { Todo } = require('./../server/models/todo');
 const { User } = require('./../server/models/user');
 const { ObjectID } = require('mongodb');
-var idTodo = "5d5c7ecf1ec7c347f42befd2";
-var idUser = "5d5ad0d6d870a42eb05ba545";
+const idTodo = "5d5c7ecf1ec7c347f42befd2";
+const idUser = "5d5ad0d6d870a42eb05ba545";
 Todo.findById(idTodo).then((todo) => {
     if (!todo) {
         return console.log('Id not found');

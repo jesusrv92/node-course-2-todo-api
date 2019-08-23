@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongodb_1 = require("mongodb");
+const _ = require("lodash");
 const todo_1 = require("./models/todo");
 const app = express();
 const port = process.env.PORT || 3000;
@@ -11,7 +12,7 @@ app.listen(port, () => {
 });
 app.use(bodyParser.json());
 app.post('/todos', (req, res) => {
-    var todo = new todo_1.default({
+    const todo = new todo_1.default({
         text: req.body.text
     });
     todo.save().then((doc) => {
@@ -28,7 +29,7 @@ app.get('/todos', (req, res) => {
     });
 });
 app.get('/todos/:id', (req, res) => {
-    let id = req.params.id;
+    const id = req.params.id;
     if (!mongodb_1.ObjectID.isValid(id)) {
         return res.status(404).send();
     }
@@ -42,11 +43,33 @@ app.get('/todos/:id', (req, res) => {
     });
 });
 app.delete('/todos/:id', (req, res) => {
-    let id = req.params.id;
+    const id = req.params.id;
     if (!mongodb_1.ObjectID.isValid(id)) {
         return res.status(404).send();
     }
     todo_1.default.findByIdAndDelete(id).then((todo) => {
+        if (!todo) {
+            return res.status(404).send();
+        }
+        res.send({ todo });
+    }).catch((e) => {
+        res.status(400).send();
+    });
+});
+app.patch('/todos/:id', (req, res) => {
+    const id = req.params.id;
+    const body = _.pick(req.body, ['text', 'completed']);
+    if (!mongodb_1.ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+    if (_.isBoolean(body.completed) && body.completed) {
+        body.completedAt = new Date().getTime();
+    }
+    else {
+        body.completed = false;
+        body.completedAt = null;
+    }
+    todo_1.default.findByIdAndUpdate(id, { $set: body }, { new: true }).then((todo) => {
         if (!todo) {
             return res.status(404).send();
         }
